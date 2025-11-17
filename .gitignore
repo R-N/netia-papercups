@@ -87,7 +87,6 @@ assets/build/
 
 # Docker
 .dockerignore
-docker-compose.yml
 docker-compose.override.yml
 
 # Local development scripts (dev.sh is now committed for team use)

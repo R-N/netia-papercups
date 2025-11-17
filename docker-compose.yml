@@ -1,0 +1,33 @@
+version: "3.2"
+
+services:
+  papercups:
+    # image: papercups/papercups:latest
+    build:
+      context: .
+    restart: always
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && echo 'running' && /entrypoint.sh run"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      # PUT YOUR OWN SECRET KEYBASE HERE (MUST BE AT LEAST 64 BYTES)
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      BACKEND_URL: ${BACKEND_URL}
+      MIX_ENV: ${MIX_ENV}
+      REQUIRE_DB_SSL: "false"
+      REACT_APP_FILE_UPLOADS_ENABLED: 1
+      # Replace with your domain name
+      REACT_APP_URL: ${REACT_APP_URL}
+
+  db:
+    image: postgres:alpine
+    restart: always
+    container_name: papercups
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
